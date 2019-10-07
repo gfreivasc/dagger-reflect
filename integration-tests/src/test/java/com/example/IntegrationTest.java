@@ -1571,4 +1571,15 @@ public final class IntegrationTest {
             .value();
     assertThat(result).isSameInstanceAs(value);
   }
+
+  @Test
+  @IgnoreCodegen
+  public void bindsIntoMapWithLazyProviderFetching() {
+    BindsProviderLazyCycle.TestFactory result =
+        backend
+            .create(BindsProviderLazyCycle.class)
+            .getFactory();
+
+    assertThat(result).isNotNull();
+  }
 }

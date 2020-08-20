@@ -1,19 +1,22 @@
 package com.example;
 
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.fail;
-
-import dagger.Lazy;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import javax.inject.Provider;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import javax.inject.Provider;
+
+import dagger.Lazy;
+
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.fail;
 
 @RunWith(Parameterized.class)
 public final class IntegrationTest {
@@ -1584,6 +1587,35 @@ public final class IntegrationTest {
     String result =
         backend.factory(NestedDependencyInterfaceTest.Factory.class).create(() -> value).value();
     assertThat(result).isSameInstanceAs(value);
+  }
+
+  @Test
+  public void multibindingMapProviderCycleIndirection() {
+    MultibindingMapProviderCycleIndirection.Factory factory =
+        backend.create(MultibindingMapProviderCycleIndirection.class).factory();
+    assertThat(factory).isNotNull();
+    assertThat(factory.providerMap.get(MultibindingMapProviderCycleIndirection.A.class)).isNotNull();
+  }
+
+  @Test
+  public void bindsIndirectionCycle() {
+    BindsIndirectionCycle.B b =
+        backend.create(BindsIndirectionCycle.class).b();
+    assertThat(b).isNotNull();
+    assertThat(b.providerObject.get()).isNotNull();
+    assertThat(b.lazyObject.get()).isNotNull();
+    assertThat(b.lazyProviderObject.get()).isNotNull();
+  }
+
+  @Test
+  public void indirectionCycle() {
+    IndirectionCycle component = backend.create(IndirectionCycle.class);
+    IndirectionCycle.A a = component.a();
+    IndirectionCycle.C c = component.c();
+    assertThat(a).isNotNull();
+    assertThat(c.providerA.get()).isNotNull();
+    assertThat(c.lazyA.get()).isNotNull();
+    assertThat(c.lazyProviderA.get()).isNotNull();
   }
 
   @Test

@@ -8,8 +8,10 @@ import javax.inject.Provider;
 import dagger.Binds;
 import dagger.Component;
 import dagger.Module;
+import dagger.Provides;
 import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
+import dagger.multibindings.StringKey;
 
 @Component(modules = MultibindingMapProviderCycleIndirection.Module1.class)
 public interface MultibindingMapProviderCycleIndirection {
@@ -17,26 +19,17 @@ public interface MultibindingMapProviderCycleIndirection {
 
   @Module
   abstract class Module1 {
-    @Binds
+    @Provides
     @IntoMap
-    @ClassKey(A.class)
-    abstract Object bindA(A a);
-  }
-
-  class A {
-    public final Factory factory;
-
-    @Inject
-    A(Factory factory) {
-      this.factory = factory;
-    }
+    @StringKey("1")
+    static Long one(Factory factory) { return 1L; }
   }
 
   class Factory {
-    public final Map<Class<?>, Provider<Object>> providerMap;
+    public final Map<String, Provider<Long>> providerMap;
 
     @Inject
-    Factory(Map<Class<?>, Provider<Object>> providerMap) {
+    Factory(Map<String, Provider<Long>> providerMap) {
       this.providerMap = providerMap;
     }
   }

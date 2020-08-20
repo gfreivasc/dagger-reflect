@@ -1594,7 +1594,8 @@ public final class IntegrationTest {
     MultibindingMapProviderCycleIndirection.Factory factory =
         backend.create(MultibindingMapProviderCycleIndirection.class).factory();
     assertThat(factory).isNotNull();
-    assertThat(factory.providerMap.get(MultibindingMapProviderCycleIndirection.A.class)).isNotNull();
+    assertThat(factory.providerMap.get("1")).isNotNull();
+    assertThat(factory.providerMap.get("1").get()).isEqualTo(1L);
   }
 
   @Test

@@ -1,22 +1,19 @@
 package com.example;
 
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.fail;
+
+import dagger.Lazy;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import javax.inject.Provider;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import javax.inject.Provider;
-
-import dagger.Lazy;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.fail;
 
 @RunWith(Parameterized.class)
 public final class IntegrationTest {
